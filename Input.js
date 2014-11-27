@@ -14,8 +14,8 @@ addEventListener("touchmove",
 	function(evt) {
 		event.preventDefault();
 		var rect = canvas.getBoundingClientRect(); 
-		mouse.x = evt.clientX - rect.left;
-		mouse.y = evt.clientY - rect.top;
+		mouse.x = evt.touches[0].clientX - rect.left;
+		mouse.y = evt.touches[0].clientY - rect.top;
 	}, 
 false);
 
@@ -30,9 +30,10 @@ false);
 
 addEventListener("touchend", 
 	function(evt) {
+		event.preventDefault();
 		var rect = canvas.getBoundingClientRect(); 
-		mouse.x = evt.clientX - rect.left;
-		mouse.y = evt.clientY - rect.top;
+		mouse.x = evt.touches[0].clientX - rect.left;
+		mouse.y = evt.touches[0].clientY - rect.top;
 		current_scene.onclicked();
 	}, 
 false);

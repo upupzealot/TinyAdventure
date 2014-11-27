@@ -1,7 +1,7 @@
 function Actor() {
 	this.self = null;
 	this.scene = null;
-	this.x = 480;
+	this.x = 240;
 	this.y = 100;
 	this.size = 50;
 	this.color = "#FF0000";

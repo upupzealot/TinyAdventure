@@ -15,6 +15,7 @@ function Scene(width, height) {
 
 	var dt = 0;
 	this.time_mark = 0;
+	this.fps = 0;
 
 	this.actors = new Array();
 
@@ -50,8 +51,8 @@ Scene.prototype = {
 	act:function() {
 		var self = this.self;
 		var current_time = new Date().getTime();
-		dt = (current_time - self.timemark) / 1000;
-		self.timemark = current_time;
+		dt = (current_time - self.time_mark) / 1000;
+		self.time_mark = current_time;
 
 		self.update(dt);
 		for (var i = 0; i < self.actors.length; i++) {
@@ -75,6 +76,7 @@ Scene.prototype = {
 
 		ctx.fillStyle = '#FFFFFF';
 		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
+		ctx.fillText("fps:" + self.fps, 0, 50);
 	},
 
 	addActor:function() {
