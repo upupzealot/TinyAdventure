@@ -12,6 +12,7 @@ false);
 
 addEventListener("touchmove", 
 	function(evt) {
+		event.preventDefault();
 		var rect = canvas.getBoundingClientRect(); 
 		mouse.x = evt.clientX - rect.left;
 		mouse.y = evt.clientY - rect.top;
