@@ -29,10 +29,10 @@ Actor.prototype = {
 	onclicked:function() {
 		console.log("clicked");
 	}
-}
+};
 
 Actor.creat = function() {
 	var actor = new Actor();
 	actor.self = actor;
 	return actor;
-}
+};

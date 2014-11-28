@@ -2,6 +2,7 @@ var mouse = {x : 0, y : 0};
 
 function Scene(width, height) {
 	this.self = this;
+	current_scene = this;
 
 	this.width = width;
 	this.height = height;
@@ -15,7 +16,7 @@ function Scene(width, height) {
 
 	var dt = 0;
 	this.time_mark = 0;
-	this.fps = 0;
+	this.fps = new FPS();
 
 	this.actors = new Array();
 
@@ -47,6 +48,14 @@ Scene.prototype = {
 		ctx.translate(clip_x, clip_y);
 		ctx.scale(scale, scale);
 	},
+	
+	onclicked:function() {
+		for (var i = 0; i < self.actors.length; i++) {
+			if(self.actors[i].contains(mouse)) {
+				self.actors[i].onclicked();
+			}
+		};
+	},
 
 	act:function() {
 		var self = this.self;
@@ -54,6 +63,7 @@ Scene.prototype = {
 		dt = (current_time - self.time_mark) / 1000;
 		self.time_mark = current_time;
 
+		self.fps.update(dt);
 		self.update(dt);
 		for (var i = 0; i < self.actors.length; i++) {
 			self.actors[i].update(dt);
@@ -76,7 +86,7 @@ Scene.prototype = {
 
 		ctx.fillStyle = '#FFFFFF';
 		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
-		ctx.fillText("fps:" + self.fps, 0, 50);
+		ctx.fillText("fps:" + self.fps.fps, 0, 70);
 	},
 
 	addActor:function() {
@@ -93,4 +103,4 @@ Scene.prototype = {
 			actor.y = arguments[2];
 		}
 	}
-}
+};
