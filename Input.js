@@ -40,6 +40,6 @@ false);
 
 addEventListener("keydown", 
 	function(evt) {
-		print(evt.which);
+		console.log(evt.which);
 	},
 false);

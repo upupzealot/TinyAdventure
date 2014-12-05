@@ -1,11 +1,15 @@
-function Actor() {
+function Actor(image) {
 	this.self = null;
 	this.scene = null;
-	this.x = 240;
-	this.y = 100;
+	this.x = 0;
+	this.y = 0;
 	this.size = 50;
 	this.color = "#FF0000";
-	this.image = ZImage.creat();
+	if(image != null) {
+		this.image = image;
+	} else {
+		this.image = new Bitmap();
+	}
 }
 
 Actor.prototype = {

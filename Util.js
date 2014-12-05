@@ -1,5 +1,14 @@
-function print(string) {
-	console.log(string);
+function base (child_instance, parent_class, arguments) {
+	parent_class.apply(child_instance, arguments);
+
+	for(var prop in parent_class.prototype) {
+		var proto = child_instance.constructor.prototype;
+		if(!proto[prop]) {
+			proto[prop] = parent_class.prototype[prop];
+		}
+		//proto[prop]["super"] = parent_class.prototype;
+	}
+	child_instance.super = parent_class;
 }
 
 Math.easeOutBack = function(start, end, value){

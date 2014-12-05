@@ -20,7 +20,7 @@ function Scene(width, height) {
 
 	this.actors = new Array();
 
-	this.color = '707070';
+	this.color = '#707070';
 }
 
 Scene.prototype = {
@@ -33,7 +33,7 @@ Scene.prototype = {
 
 		ctx = canvas.getContext('2d');
 
-		ctx.fillStyle = '000000';
+		ctx.fillStyle = '#000000';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		var scale = Math.min(canvas.width / self.width, canvas.height / self.height);
@@ -72,21 +72,21 @@ Scene.prototype = {
 		for (var i = 0; i <  self.actors.length; i++) {
 			 self.actors[i].render(ctx);
 		};
+
+		ctx.fillStyle = '#FFFFFF';
+		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
+		ctx.fillText("fps:" + self.fps.fps, 0, 70);
 	},
 
 	update:function(dt) {
 		//var self = this.self;
-		//print(self.actors.length);
+		//console.log(self.actors.length);
 	},
 
 	render:function(ctx) {
 		var self = this.self;
 		ctx.fillStyle = self.color;
 		ctx.fillRect(0, 0, self.width, self.height);
-
-		ctx.fillStyle = '#FFFFFF';
-		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
-		ctx.fillText("fps:" + self.fps.fps, 0, 70);
 	},
 
 	addActor:function() {
