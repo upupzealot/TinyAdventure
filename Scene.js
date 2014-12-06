@@ -66,7 +66,11 @@ Scene.prototype = {
 
 	act:function() {
 		var self = this.self;
+
 		var current_time = new Date().getTime();
+		if(self.time_mark == 0) {
+			self.time_mark = current_time;
+		}
 		dt = (current_time - self.time_mark) / 1000;
 		self.time_mark = current_time;
 

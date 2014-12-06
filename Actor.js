@@ -26,13 +26,14 @@ Actor.prototype = {
 			//this.isDirty = false;
 		//}
 		if(self.scale == 1) {
-			ctx.drawImage(this.image, this.x - this.image.width / 2, this.y - this.image.height / 2);
+			ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
 		} else {
 			ctx.save();
 				ctx.translate(self.x, self.y);
 				ctx.scale(self.scale, self.scale);
 
-				ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2);
+				if(self.image == null) {ctx.restore();;return;}
+				ctx.drawImage(self.image, -self.image.width / 2, -self.image.height / 2);
 
 				ctx.restore();
 		}

@@ -6,9 +6,8 @@ function base (child_instance, parent_class, arguments) {
 		if(!proto[prop]) {
 			proto[prop] = parent_class.prototype[prop];
 		}
-		//proto[prop]["super"] = parent_class.prototype;
 	}
-	child_instance.super = parent_class;
+	child_instance.super = parent_class.prototype;
 }
 
 Math.easeOutBack = function(start, end, value){
