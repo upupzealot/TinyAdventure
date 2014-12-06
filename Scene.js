@@ -39,16 +39,16 @@ Scene.prototype = {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		self.scale = Math.min(canvas.width / self.width, canvas.height / self.height);
-		self.view_width = Math.floor(self.width * self.scale);
-		self.view_height = Math.floor(self.height * self.scale);
+		self.view_width = self.width * self.scale >> 0;
+		self.view_height = self.height * self.scale >> 0;
 
 		buffer = document.createElement("canvas");
 		buffer.width = self.width;
 		buffer.height = self.height;
 		btx = buffer.getContext("2d");
 
-		self.clip_x = Math.floor((canvas.width - self.view_width) / 2);
-		self.clip_y = Math.floor((canvas.height - self.view_height) / 2);
+		self.clip_x = (canvas.width - self.view_width) / 2 >> 0;
+		self.clip_y = (canvas.height - self.view_height) / 2 >> 0;
 
 		ctx.rect(self.clip_x, self.clip_y, self.view_width, self.view_height);
 		ctx.translate(self.clip_x, self.clip_y);

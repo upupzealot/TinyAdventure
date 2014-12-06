@@ -4,26 +4,20 @@ var canvas = document.getElementById('main_canvas');
 
 addEventListener("mousemove", 
 	function(evt) {
-		var rect = canvas.getBoundingClientRect(); 
-		mouse.x = evt.clientX - rect.left;
-		mouse.y = evt.clientY - rect.top;
+		PointConvert(evt);
 	}, 
 false);
 
 addEventListener("touchmove", 
 	function(evt) {
 		event.preventDefault();
-		var rect = canvas.getBoundingClientRect(); 
-		mouse.x = evt.touches[0].clientX - rect.left;
-		mouse.y = evt.touches[0].clientY - rect.top;
+		PointConvert(evt.touches[0]);
 	}, 
 false);
 
 addEventListener("click", 
 	function(evt) {
-		var rect = canvas.getBoundingClientRect();
-		mouse.x = evt.clientX - rect.left;
-		mouse.y = evt.clientY - rect.top;
+		PointConvert(evt);
 		current_scene.onclicked();
 	}, 
 false);
@@ -31,9 +25,7 @@ false);
 addEventListener("touchend", 
 	function(evt) {
 		event.preventDefault();
-		var rect = canvas.getBoundingClientRect(); 
-		mouse.x = evt.touches[0].clientX - rect.left;
-		mouse.y = evt.touches[0].clientY - rect.top;
+		PointConvert(evt.touches[0]);
 		current_scene.onclicked();
 	}, 
 false);
@@ -43,3 +35,18 @@ addEventListener("keydown",
 		console.log(evt.which);
 	},
 false);
+
+function PointConvert(point_event) {
+	var rect = canvas.getBoundingClientRect();
+	var x = point_event.clientX - rect.left;
+	var y = point_event.clientY - rect.top;
+
+	if(	x >= current_scene.clip_x && 
+		x <= current_scene.clip_x + current_scene.view_width && 
+		y >= current_scene.clip_y && 
+		y <= current_scene.clip_y + current_scene.view_height) {
+
+		mouse.x = (x - current_scene.clip_x) / current_scene.scale >> 0;
+		mouse.y = (y - current_scene.clip_y) / current_scene.scale >> 0;
+	}
+}

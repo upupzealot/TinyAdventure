@@ -11,7 +11,7 @@ FPS.prototype = {
 		self.time_count += dt;
 		self.frame_count++;
 		if(self.time_count >= 1) {
-			self.fps = self.frame_count / self.time_count;
+			self.fps = self.frame_count / self.time_count >> 0;
 			self.frame_count = 0;
 			self.time_count = 0;
 		}
