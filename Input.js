@@ -21,7 +21,7 @@ false);
 
 addEventListener("click", 
 	function(evt) {
-		var rect = canvas.getBoundingClientRect(); 
+		var rect = canvas.getBoundingClientRect();
 		mouse.x = evt.clientX - rect.left;
 		mouse.y = evt.clientY - rect.top;
 		current_scene.onclicked();

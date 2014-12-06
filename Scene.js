@@ -9,10 +9,13 @@ function Scene(width, height) {
 
 	this.view_width = width;
 	this.view_height = height;
+	this.clip_x = 0;
+	this.clip_y = 0;
+	this.scale = 1;
 
-	var canvas = null;
 	var ctx = null;
-
+	var buffer = null;
+	var btx = null;
 
 	var dt = 0;
 	this.time_mark = 0;
@@ -20,36 +23,40 @@ function Scene(width, height) {
 
 	this.actors = new Array();
 
-	this.color = '#707070';
+	this.color = "#707070";
 }
 
 Scene.prototype = {
 	init:function(document) {
 		var self = this.self;
 
-		canvas = document.getElementById('main_canvas');
+		canvas = document.getElementById("main_canvas");
 		canvas.width = document.body.clientWidth;
 		canvas.height = document.body.clientHeight;
-
-		ctx = canvas.getContext('2d');
+		ctx = canvas.getContext("2d");
 
 		ctx.fillStyle = '#000000';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		var scale = Math.min(canvas.width / self.width, canvas.height / self.height);
-		self.view_width = Math.floor(self.width * scale);
-		self.view_height = Math.floor(self.height * scale);
+		self.scale = Math.min(canvas.width / self.width, canvas.height / self.height);
+		self.view_width = Math.floor(self.width * self.scale);
+		self.view_height = Math.floor(self.height * self.scale);
 
-		var clip_x = Math.floor((canvas.width - self.view_width) / 2);
-		var clip_y = Math.floor((canvas.height - self.view_height) / 2);
+		buffer = document.createElement("canvas");
+		buffer.width = self.width;
+		buffer.height = self.height;
+		btx = buffer.getContext("2d");
 
-		ctx.rect(clip_x, clip_y, self.view_width, self.view_height);
-		ctx.clip();
-		ctx.translate(clip_x, clip_y);
-		ctx.scale(scale, scale);
+		self.clip_x = Math.floor((canvas.width - self.view_width) / 2);
+		self.clip_y = Math.floor((canvas.height - self.view_height) / 2);
+
+		ctx.rect(self.clip_x, self.clip_y, self.view_width, self.view_height);
+		ctx.translate(self.clip_x, self.clip_y);
+		ctx.scale(self.scale, self.scale);
 	},
 	
 	onclicked:function() {
+		var self = this.self;
 		for (var i = 0; i < self.actors.length; i++) {
 			if(self.actors[i].contains(mouse)) {
 				self.actors[i].onclicked();
@@ -68,14 +75,18 @@ Scene.prototype = {
 		for (var i = 0; i < self.actors.length; i++) {
 			self.actors[i].update(dt);
 		};
-		self.render(ctx);
+		//self.render(btx);
 		for (var i = 0; i <  self.actors.length; i++) {
+			 //self.actors[i].render(btx);
 			 self.actors[i].render(ctx);
 		};
+		ctx.drawImage(buffer, 0, 0);
 
+		ctx.fillStyle = '#707070';
+		ctx.fillRect(0, 0, 160, 40);
 		ctx.fillStyle = '#FFFFFF';
 		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
-		ctx.fillText("fps:" + self.fps.fps, 0, 70);
+		ctx.fillText("fps:" + self.fps.fps, 0, 30);
 	},
 
 	update:function(dt) {
