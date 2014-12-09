@@ -10,21 +10,24 @@ false);
 addEventListener("touchmove", 
 	function(evt) {
 		event.preventDefault();
-		//PointConvert(evt.touches[0]);
+		PointConvert(evt.touches[0]);
 	}, 
 false);
 
 addEventListener("click", 
 	function(evt) {
-		PointConvert(evt);
-		Game.current_scene.onClicked();
+		if(PointConvert(evt)) {
+			Game.current_scene.onClicked();
+		}
 	}, 
 false);
 
 addEventListener("touchstart", 
 	function(evt) {
 		event.preventDefault();
-		PointConvert(evt.touches[0]);
+		if(PointConvert(evt)) {
+			PointConvert(evt.touches[0]);
+		}
 		Game.current_scene.onClicked();
 	}, 
 false);
@@ -42,12 +45,15 @@ function PointConvert(point_event) {
 	mouse_raw.x = x;
 	mouse_raw.y = y;
 
-	if(	x >= Screen.clip_x && 
+	var contains = x >= Screen.clip_x && 
 		x <= Screen.clip_x + Screen.view_width && 
 		y >= Screen.clip_y && 
-		y <= Screen.clip_y + Screen.view_height) {
+		y <= Screen.clip_y + Screen.view_height;
 
+	if(contains) {
 		mouse.x = (x - Screen.clip_x) / Screen.scale >> 0;
 		mouse.y = (y - Screen.clip_y) / Screen.scale >> 0;
 	}
+
+	return contains;
 }
