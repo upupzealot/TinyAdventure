@@ -23,8 +23,13 @@ function Hero() {
 	this.scale = 0.8;
 
 	this.animate_count = 0;
-	this.animate_interval = 1 / 12;
+	this.animate_interval = 1 / 16;
 	this.frame_count = 0;
+
+	this.step_interval = this.animate_interval * 8;
+	this.step_begin_position = {x : 0, y : 0};
+	this.step_progress = 0;
+	this.step_offset = {x : 0, y : 0};
 }
 
 Hero.directions = ["up", "down", "left", "right"];
@@ -36,14 +41,39 @@ Hero.prototype.update = function(dt) {
 	self.animate_count += dt;
 	if(self.animate_count >= self.animate_interval) {
 		self.animate_count -= self.animate_interval;
-		self.frame_count = (++self.frame_count) % self.animate_frames[self.direction][self.state].length;
+		self.frame_count++;
+		if(self.state == "walk") {
+			if(self.frame_count == 8) {
+				self.state = "stand";
+				self.frame_count = 0;
+				self.animate_count = 0;
+
+				self.scene.flip(self.direction);
+				self.step_progress = 0;
+			} else {
+				self.frame_count = self.frame_count % self.animate_frames[self.direction][self.state].length;
+				self.step_progress = (self.frame_count * self.animate_interval + self.animate_count) / (self.animate_interval * 8);
+			}
+			switch (self.direction) {
+				case "up": 
+					self.step_offset.y = self.step_progress * 80;
+					break;
+				case "left" : 
+					self.step_offset.x = self.step_progress * 80;
+					break;
+				case "right" : 
+					self.step_offset.x = self.step_progress * -80;
+					break;
+			}
+		} else {
+			self.frame_count = self.frame_count % self.animate_frames[self.direction][self.state].length;
+		}
 	}
 }
 
 Hero.prototype.render = function(ctx) {
 	var self = this.self;
 
-	//console.log(self.direction);
 	self.image = self.animate_frames[self.direction][self.state][self.frame_count];
 
 	self.super.render.call(self, ctx);
@@ -56,6 +86,21 @@ Hero.prototype.contains = function() {
 Hero.prototype.onClicked = function() {
 	var self = this.self;
 
+	if(self.state == "stand") {
+		self.step_begin_position.x = self.x;
+		self.step_begin_position.y = self.y;
+
+		self.direction = self.getClickDirection();
+
+		self.state = "walk";
+		self.frame_count = 0;
+		animate_count = 0;
+	}
+}
+
+Hero.prototype.getClickDirection = function () {
+	var self = this.self;
+
 	var up_point = {x : self.x, y : self.y - 80};
 	var left_point = {x : self.x - 80, y : self.y};
 	var right_point = {x : self.x + 80, y : self.y};
@@ -65,11 +110,11 @@ Hero.prototype.onClicked = function() {
 	var d_right = (mouse.x - right_point.x) * (mouse.x - right_point.x) + (mouse.y - right_point.y) * (mouse.y - right_point.y);
 
 	if(d_up < d_left && d_up < d_right) {
-		self.direction = "up";
+		return "up";
 	} else if (d_left < d_right) {
-		self.direction = "left";
+		return "left";
 	} else {
-		self.direction = "right";
+		return "right";
 	}
 }
 
@@ -82,7 +127,6 @@ Hero.prototype.onKeyDown = function(keycode) {
 
 	if(keycode == 65 || keycode == 37) {
 		self.direction = "left";
-		//console.log(self.direction);
 	}
 
 	if(keycode == 68 || keycode == 39) {
