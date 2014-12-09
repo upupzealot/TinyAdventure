@@ -40,11 +40,15 @@ Actor.prototype = {
 	},
 
 	contains:function(mouse) {
-		return (mouse.x - this.x) * (mouse.x - this.x) + (mouse.y - this.y) * (mouse.y - this.y) < this.size * this.size;
+		return false;
 	},
 
 	onclicked:function() {
-		console.log("clicked");
+		
+	},
+
+	onKeyDown:function(keycode) {
+
 	}
 };
 

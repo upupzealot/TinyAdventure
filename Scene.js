@@ -2,74 +2,52 @@ var mouse = {x : 0, y : 0};
 
 function Scene(width, height) {
 	this.self = this;
-	current_scene = this;
 
 	this.width = width;
 	this.height = height;
 
-	this.view_width = width;
-	this.view_height = height;
-	this.clip_x = 0;
-	this.clip_y = 0;
-	this.scale = 1;
-
-	var ctx = null;
 	var buffer = null;
-	var btx = null;
+	var buffer_ctx = null;
 
-	var dt = 0;
-	this.time_mark = 0;
 	this.fps = new FPS();
 
 	this.actors = new Array();
 
 	this.color = "#707070";
+	this.background = null;
 }
 
 Scene.prototype = {
-	init:function(document) {
-		var self = this.self;
-
-		canvas = document.getElementById("main_canvas");
-		canvas.width = document.body.clientWidth;
-		canvas.height = document.body.clientHeight;
-		ctx = canvas.getContext("2d");
-
-		ctx.fillStyle = '#000000';
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-		self.scale = Math.min(canvas.width / self.width, canvas.height / self.height);
-		self.view_width = self.width * self.scale >> 0;
-		self.view_height = self.height * self.scale >> 0;
-
-		buffer = document.createElement("canvas");
-		buffer.width = self.width;
-		buffer.height = self.height;
-		btx = buffer.getContext("2d");
-
-		self.clip_x = (canvas.width - self.view_width) / 2 >> 0;
-		self.clip_y = (canvas.height - self.view_height) / 2 >> 0;
-
-		ctx.rect(self.clip_x, self.clip_y, self.view_width, self.view_height);
-		ctx.translate(self.clip_x, self.clip_y);
-		ctx.scale(self.scale, self.scale);
-	},
-	
-	onclicked:function() {
+	onClicked:function() {
 		var self = this.self;
 		for (var i = 0; i < self.actors.length; i++) {
 			if(self.actors[i].contains(mouse)) {
-				self.actors[i].onclicked();
+				self.actors[i].onClicked();
 			}
 		};
 	},
 
+	onKeyDown:function(keycode) {
+		var self = this.self;
+		for (var i = 0; i < self.actors.length; i++) {
+			self.actors[i].onKeyDown(keycode);
+		};
+	},
+
+	start:function() {},
+
 	act:function() {
 		var self = this.self;
+
+		if(!Bitmap.LoadedAll()) {
+			return;
+		}
 
 		var current_time = new Date().getTime();
 		if(self.time_mark == 0) {
 			self.time_mark = current_time;
+			self.start();
+			return;
 		}
 		dt = (current_time - self.time_mark) / 1000;
 		self.time_mark = current_time;
@@ -79,9 +57,8 @@ Scene.prototype = {
 		for (var i = 0; i < self.actors.length; i++) {
 			self.actors[i].update(dt);
 		};
-		//self.render(btx);
+		self.render(ctx);
 		for (var i = 0; i <  self.actors.length; i++) {
-			 //self.actors[i].render(btx);
 			 self.actors[i].render(ctx);
 		};
 		ctx.drawImage(buffer, 0, 0);
@@ -94,8 +71,7 @@ Scene.prototype = {
 	},
 
 	update:function(dt) {
-		//var self = this.self;
-		//console.log(self.actors.length);
+		
 	},
 
 	render:function(ctx) {
