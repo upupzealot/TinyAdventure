@@ -1,4 +1,5 @@
 var mouse = {x : 0, y : 0};
+var mouse_raw = {x : 0, y : 0};
 
 addEventListener("mousemove", 
 	function(evt) {
@@ -9,7 +10,7 @@ false);
 addEventListener("touchmove", 
 	function(evt) {
 		event.preventDefault();
-		PointConvert(evt.touches[0]);
+		//PointConvert(evt.touches[0]);
 	}, 
 false);
 
@@ -20,7 +21,7 @@ addEventListener("click",
 	}, 
 false);
 
-addEventListener("touchend", 
+addEventListener("touchstart", 
 	function(evt) {
 		event.preventDefault();
 		PointConvert(evt.touches[0]);
@@ -38,6 +39,8 @@ function PointConvert(point_event) {
 	var rect = Screen.canvas.getBoundingClientRect();
 	var x = point_event.clientX - rect.left;
 	var y = point_event.clientY - rect.top;
+	mouse_raw.x = x;
+	mouse_raw.y = y;
 
 	if(	x >= Screen.clip_x && 
 		x <= Screen.clip_x + Screen.view_width && 

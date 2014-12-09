@@ -43,7 +43,7 @@ Actor.prototype = {
 		return false;
 	},
 
-	onclicked:function() {
+	onClicked:function() {
 		
 	},
 

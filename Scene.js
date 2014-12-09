@@ -9,8 +9,6 @@ function Scene(width, height) {
 	var buffer = null;
 	var buffer_ctx = null;
 
-	this.fps = new FPS();
-
 	this.actors = new Array();
 
 	this.color = "#707070";
@@ -35,40 +33,6 @@ Scene.prototype = {
 	},
 
 	start:function() {},
-
-	act:function() {
-		var self = this.self;
-
-		if(!Bitmap.LoadedAll()) {
-			return;
-		}
-
-		var current_time = new Date().getTime();
-		if(self.time_mark == 0) {
-			self.time_mark = current_time;
-			self.start();
-			return;
-		}
-		dt = (current_time - self.time_mark) / 1000;
-		self.time_mark = current_time;
-
-		self.fps.update(dt);
-		self.update(dt);
-		for (var i = 0; i < self.actors.length; i++) {
-			self.actors[i].update(dt);
-		};
-		self.render(ctx);
-		for (var i = 0; i <  self.actors.length; i++) {
-			 self.actors[i].render(ctx);
-		};
-		ctx.drawImage(buffer, 0, 0);
-
-		ctx.fillStyle = '#707070';
-		ctx.fillRect(0, 0, 160, 40);
-		ctx.fillStyle = '#FFFFFF';
-		ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
-		ctx.fillText("fps:" + self.fps.fps, 0, 30);
-	},
 
 	update:function(dt) {
 		

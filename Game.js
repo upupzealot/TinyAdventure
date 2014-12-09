@@ -1,6 +1,6 @@
 function Game() {};
 
-//Game.FPS = new FPS();
+Game.FPS = new FPS();
 
 Game.current_scene = null;
 
@@ -40,7 +40,7 @@ Game.act = function() {
 		Game.dt = (current_time - Game.time_mark) / 1000;
 		Game.time_mark = current_time;
 
-		//Game.FPS.update(dt);
+		Game.FPS.update(Game.dt);
 
 		Game.current_scene.update(Game.dt);
 		for (var i = 0; i < Game.current_scene.actors.length; i++) {
@@ -50,6 +50,14 @@ Game.act = function() {
 		for (var i = 0; i <  Game.current_scene.actors.length; i++) {
 			 Game.current_scene.actors[i].render(Screen.ctx);
 		};
+
+		Screen.ctx.fillStyle = '#707070';
+		Screen.ctx.fillRect(0, 0, 160, 70);
+		Screen.ctx.fillStyle = '#FFFFFF';
+		Screen.ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
+		Screen.ctx.fillText("fps:" + Game.FPS.fps, 0, 25);
+		Screen.ctx.fillText("view:" + Screen.view_width + "," + Screen.view_height, 0, 40);
+		Screen.ctx.fillText("clip:" + Screen.clip_x + "," + Screen.clip_y, 0, 55);
 	}
 }
 
@@ -79,8 +87,8 @@ Game.setScene = function(scene) {
 	Screen.view_width = scene.width * Screen.scale >> 0;
 	Screen.view_height = scene.height * Screen.scale >> 0;
 
-	Screen.clip_x = (Screen.width - Screen.view_width) >> 1;
-	Screen.clip_y = (Screen.height - Screen.view_height) >> 1;
+	Screen.clip_x = (Screen.canvas.width - Screen.view_width) / 2 >> 0;
+	Screen.clip_y = (Screen.canvas.height - Screen.view_height) / 2 >> 0;
 
 	Screen.ctx.restore();
 	Screen.ctx.rect(Screen.clip_x, Screen.clip_y, Screen.view_width, Screen.view_height);

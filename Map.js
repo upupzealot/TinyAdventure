@@ -28,22 +28,6 @@ Map.prototype.start = function() {
 			} else {
 				this.buffer_context.drawImage(Bitmap.pool["Tile.png"], i * 80, j * 80);
 			}
-			//var Tile = new Bitmap(file_name);
-			//btx.drawImage(Tile, i * 80, j * 80);
-
-			/*
-			var actor = null;
-			if(Math.random() * 100 < 10) {
-				actor = new Actor(new Bitmap("Bush_Small.png"));
-			} else if(Math.random() * 100 < 5) {
-				actor = new Actor(new Bitmap("Slate.png"));
-			} else {
-				actor = new Actor(new Bitmap("Tile.png"));
-			}
-			actor.x = i * 80 + 40;
-			actor.y = j * 80 + 40;
-			this.addActor(actor);
-			*/
 		}
 	}
 }
