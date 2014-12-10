@@ -25,7 +25,7 @@ false);
 addEventListener("touchstart", 
 	function(evt) {
 		event.preventDefault();
-		if(PointConvert(evt.touches[0]) {
+		if(PointConvert(evt.touches[0])) {
 			Game.current_scene.onClicked();
 		}
 	}, 

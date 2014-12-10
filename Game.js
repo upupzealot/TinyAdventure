@@ -52,11 +52,11 @@ Game.act = function() {
 		};
 
 		Screen.ctx.fillStyle = '#707070';
-		Screen.ctx.fillRect(0, 0, 160, 30);
+		Screen.ctx.fillRect(0, 0, 160, 50);
 		Screen.ctx.fillStyle = '#FFFFFF';
 		Screen.ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
 		Screen.ctx.fillText("fps:" + Game.FPS.fps, 0, 25);
-		//Screen.ctx.fillText("view:" + Screen.view_width + "," + Screen.view_height, 0, 40);
+		Screen.ctx.fillText("flip_cost:" + Screen.flip_cost, 0, 40);
 		//Screen.ctx.fillText("clip:" + Screen.clip_x + "," + Screen.clip_y, 0, 55);
 	}
 }

@@ -44,6 +44,7 @@ Map.prototype.start = function() {
 Map.prototype.flip = function(direction) {
 	var self = this.self;
 
+	var current_time = new Date().getTime();
 	switch (direction) {
 		case "up": 
 			self.buffer_context.drawImage(self.buffer, 80, 0, self.width, self.height, 80, 80, self.width, self.height);
@@ -60,6 +61,7 @@ Map.prototype.flip = function(direction) {
 			self.buffer_context.drawImage(self.buffer, 400, 0, 80, 640, 0, 0, 80, 640);
 			break;
 	}
+	Screen.flip_cost = new Date().getTime() - current_time;
 }
 
 Map.prototype.render = function(ctx) {
