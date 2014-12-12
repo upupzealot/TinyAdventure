@@ -44,12 +44,19 @@ Hero.prototype.update = function(dt) {
 		self.frame_count++;
 		if(self.state == "walk") {
 			if(self.frame_count == 8) {
-				self.state = "stand";
 				self.frame_count = 0;
 				self.animate_count = 0;
 
 				self.scene.flip(self.direction);
 				self.step_progress = 0;
+				self.step_offset.x = 0;
+				self.step_offset.y = 0;
+
+				if(self.direction == "up") {
+					self.state = "stand";
+				} else {
+					self.direction = "up"
+				}
 			} else {
 				self.frame_count = self.frame_count % self.animate_frames[self.direction][self.state].length;
 				self.step_progress = (self.frame_count * self.animate_interval + self.animate_count) / (self.animate_interval * 8);
