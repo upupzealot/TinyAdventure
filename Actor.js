@@ -11,7 +11,7 @@ function Actor(image) {
 		this.image = new Bitmap();
 	}
 
-	this.isDirty = true;
+	this.active = true;
 }
 
 Actor.prototype = {
@@ -21,10 +21,6 @@ Actor.prototype = {
 
 	render:function(ctx) {
 		var self = this.self;
-		//if(this.isDirty) {
-
-			//this.isDirty = false;
-		//}
 		if(self.scale == 1) {
 			ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
 		} else {
@@ -39,7 +35,7 @@ Actor.prototype = {
 		}
 	},
 
-	contains:function(mouse) {
+	contains:function(point) {
 		return false;
 	},
 
@@ -50,10 +46,4 @@ Actor.prototype = {
 	onKeyDown:function(keycode) {
 
 	}
-};
-
-Actor.creat = function() {
-	var actor = new Actor();
-	actor.self = actor;
-	return actor;
 };

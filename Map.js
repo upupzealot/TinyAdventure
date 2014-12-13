@@ -8,27 +8,35 @@ function Map() {
 
 	Bitmap.load("Bush_Small.png");
 	Bitmap.load("Slate.png");
-	Bitmap.load("Tile.png");
+	Bitmap.load("Grass.png");
+	Bitmap.load("Box.png");
+	Bitmap.load("Bubble.png");
 
 	this.tiles = new Array();
 	for(var i = 0; i < 5; i++) {
 		this.tiles[i] = new Array();
 		for(var j = 0; j < 8; j++) {
 			if(Math.random() * 100 < 10) {
-				this.tiles[i][j] = "Bush_Small";
+				this.tiles[i][j] = new Tile("Bush_Small");
 			} else if(Math.random() * 100 < 5) {
-				this.tiles[i][j] = "Slate";
+				this.tiles[i][j] = new Tile("Slate");
 			} else {
-				this.tiles[i][j] = "Tile";
+				this.tiles[i][j] = new Tile("Grass");
 			}
 		}
 	}
 
+	this.tiles[2][5].object = "Box";
+
 	this.hero = new Hero();
 	this.hero.x = 2 * 80 + 40;
 	this.hero.y = 6 * 80 + 10;
-
 	this.addActor(this.hero);
+
+	this.dialog_board = new DialogBoard();
+	this.dialog_board.x = this.width / 2;
+	this.dialog_board.y = this.height / 2;
+	this.addActor(this.dialog_board);
 }
 
 Map.prototype.start = function() {
@@ -37,7 +45,6 @@ Map.prototype.start = function() {
 	var current_time = new Date().getTime();
 	self.render_map();
 	Screen.flip_cost = new Date().getTime() - current_time;
-
 }
 
 Map.prototype.render_map = function() {
@@ -45,18 +52,18 @@ Map.prototype.render_map = function() {
 
 	for(var i = 0; i < 5; i++) {
 		for(var j = 0; j < 8; j++) {
-			self.buffer_context.drawImage(Bitmap.pool[self.tiles[i][j] + ".png"], 80 + i * 80, 80 + j * 80);
+			self.tiles[i][j].render(self.buffer_context, 80 + i * 80, 80 + j * 80);
 		}
 	}
 
 	for(var i = 0; i < 5; i++) {
-		self.buffer_context.drawImage(Bitmap.pool[self.tiles[i][7] + ".png"], 80 + i * 80, 0);
+		self.tiles[i][7].render(self.buffer_context, 80 + i * 80, 0);
 	}
 	for(var j = 0; j < 8; j++) {
-		self.buffer_context.drawImage(Bitmap.pool[self.tiles[4][j] + ".png"], 0, 80 + j * 80);
+		self.tiles[4][j].render(self.buffer_context, 0, 80 + j * 80);
 	}
 	for(var j = 0; j < 8; j++) {
-		self.buffer_context.drawImage(Bitmap.pool[self.tiles[0][j] + ".png"], 480, 80 + j * 80);
+		self.tiles[0][j].render(self.buffer_context,  480, 80 + j * 80);
 	}
 }
 
@@ -110,13 +117,11 @@ Map.prototype.flip = function(direction) {
 			}
 			self.render_map();
 			break;
-			break;
 	}
 	Screen.flip_cost = new Date().getTime() - current_time;
 }
 
 Map.prototype.render = function(ctx) {
 	var self = this.self;
-	//ctx.drawImage(this.buffer, 80, 0, 400, 640, 0, 0, 400, 640);
 	ctx.drawImage(this.buffer, -80 + self.hero.step_offset.x, -80 + self.hero.step_offset.y);
 };

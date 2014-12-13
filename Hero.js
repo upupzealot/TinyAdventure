@@ -16,6 +16,8 @@ function Hero() {
 		}
 	}
 
+	this.stopped = false;
+
 	this.direction = "up";
 	this.state = "stand";
 
@@ -32,11 +34,47 @@ function Hero() {
 	this.step_offset = {x : 0, y : 0};
 }
 
+Hero.prototype.step = function(direction) {
+	var self = this.self;
+
+	self.direction = direction;
+	var front_tile;
+	switch (direction) {
+		case "up": 
+			front_tile = self.scene.tiles[2][5];
+			break;
+		case "left" : 
+			front_tile = self.scene.tiles[1][6];
+			break;
+		case "right" : 
+			front_tile = self.scene.tiles[3][6];
+			break;
+	}
+
+	if(front_tile.physics == "solid") {
+		return;
+	}
+
+	if(front_tile.object != null) {
+		self.scene.dialog_board.show();
+		self.stopped = true;
+		return;
+	}
+
+	self.state = "walk";
+	self.frame_count = 0;
+	animate_count = 0;
+}
+
 Hero.directions = ["up", "down", "left", "right"];
 Hero.states = ["stand", "walk"];
 
 Hero.prototype.update = function(dt) {
 	var self = this.self;
+
+	if(self.stopped) {
+		return;
+	}
 
 	self.animate_count += dt;
 	if(self.animate_count >= self.animate_interval) {
@@ -55,7 +93,8 @@ Hero.prototype.update = function(dt) {
 				if(self.direction == "up") {
 					self.state = "stand";
 				} else {
-					self.direction = "up"
+					self.state = "stand";
+					self.step("up");
 				}
 			} else {
 				self.frame_count = self.frame_count % self.animate_frames[self.direction][self.state].length;
@@ -93,15 +132,15 @@ Hero.prototype.contains = function() {
 Hero.prototype.onClicked = function() {
 	var self = this.self;
 
+	if(self.stopped) {
+		return;
+	}
+
 	if(self.state == "stand") {
 		self.step_begin_position.x = self.x;
 		self.step_begin_position.y = self.y;
 
-		self.direction = self.getClickDirection();
-
-		self.state = "walk";
-		self.frame_count = 0;
-		animate_count = 0;
+		self.step(self.getClickDirection());
 	}
 }
 

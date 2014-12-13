@@ -44,11 +44,15 @@ Game.act = function() {
 
 		Game.current_scene.update(Game.dt);
 		for (var i = 0; i < Game.current_scene.actors.length; i++) {
-			Game.current_scene.actors[i].update(Game.dt);
+			//if(Game.current_scene.actors[i].active) {
+				Game.current_scene.actors[i].update(Game.dt);
+			//}
 		};
 		Game.current_scene.render(Screen.ctx);
 		for (var i = 0; i <  Game.current_scene.actors.length; i++) {
-			 Game.current_scene.actors[i].render(Screen.ctx);
+			if(Game.current_scene.actors[i].active) {
+				Game.current_scene.actors[i].render(Screen.ctx);
+			}
 		};
 
 		Screen.ctx.fillStyle = '#707070';
