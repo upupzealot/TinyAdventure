@@ -44,9 +44,9 @@ Game.act = function() {
 
 		Game.current_scene.update(Game.dt);
 		for (var i = 0; i < Game.current_scene.actors.length; i++) {
-			//if(Game.current_scene.actors[i].active) {
+			if(Game.current_scene.actors[i].active) {
 				Game.current_scene.actors[i].update(Game.dt);
-			//}
+			}
 		};
 		Game.current_scene.render(Screen.ctx);
 		for (var i = 0; i <  Game.current_scene.actors.length; i++) {
@@ -60,7 +60,7 @@ Game.act = function() {
 		Screen.ctx.fillStyle = '#FFFFFF';
 		Screen.ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
 		Screen.ctx.fillText("fps:" + Game.FPS.fps, 0, 25);
-		Screen.ctx.fillText("flip_cost:" + Screen.flip_cost, 0, 40);
+		Screen.ctx.fillText("active:" + Game.current_scene.dialog_board.active, 0, 40);
 		//Screen.ctx.fillText("clip:" + Screen.clip_x + "," + Screen.clip_y, 0, 55);
 	}
 }

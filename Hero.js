@@ -99,6 +99,7 @@ Hero.prototype.update = function(dt) {
 			} else {
 				self.frame_count = self.frame_count % self.animate_frames[self.direction][self.state].length;
 				self.step_progress = (self.frame_count * self.animate_interval + self.animate_count) / (self.animate_interval * 8);
+				self.step_progress = Math.min(1, self.step_progress);
 			}
 			switch (self.direction) {
 				case "up": 
