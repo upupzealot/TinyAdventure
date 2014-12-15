@@ -19,7 +19,7 @@ Scene.prototype = {
 	onClicked:function() {
 		var self = this.self;
 		for (var i = 0; i < self.actors.length; i++) {
-			if(self.actors[i].contains(mouse)) {
+			if(self.actors[i].contains(mouse) && self.actors[i].active) {
 				self.actors[i].onClicked();
 			}
 		};
@@ -28,7 +28,9 @@ Scene.prototype = {
 	onKeyDown:function(keycode) {
 		var self = this.self;
 		for (var i = 0; i < self.actors.length; i++) {
-			self.actors[i].onKeyDown(keycode);
+			if(self.actors[i].active) {
+				self.actors[i].onKeyDown(keycode);
+			}
 		};
 	},
 

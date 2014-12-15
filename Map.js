@@ -11,7 +11,14 @@ function Map() {
 	Bitmap.load("Grass.png");
 	Bitmap.load("Box.png");
 	Bitmap.load("Enemy.png");
-	Bitmap.load("Bubble.png");
+	//Bitmap.load("Bubble.png");
+	Bitmap.load("Bubble_filled.png");
+	Bitmap.load("TextBubble.png");
+	Bitmap.load("Button.png");
+}
+
+Map.prototype.start = function() {
+	var self = this.self;
 
 	this.tiles = new Array();
 	for(var i = 0; i < 5; i++) {
@@ -29,6 +36,10 @@ function Map() {
 
 	this.tiles[2][3].object = new Enemy();
 
+	var current_time = new Date().getTime();
+	self.render_map();
+	Screen.flip_cost = new Date().getTime() - current_time;
+
 	this.hero = new Hero();
 	this.hero.x = 2 * 80 + 40;
 	this.hero.y = 6 * 80 + 10;
@@ -38,14 +49,7 @@ function Map() {
 	this.dialog_board.x = this.width / 2;
 	this.dialog_board.y = this.height / 2;
 	this.addActor(this.dialog_board);
-}
-
-Map.prototype.start = function() {
-	var self = this.self;
-
-	var current_time = new Date().getTime();
-	self.render_map();
-	Screen.flip_cost = new Date().getTime() - current_time;
+	this.dialog_board.addButton();
 }
 
 Map.prototype.render_map = function() {
