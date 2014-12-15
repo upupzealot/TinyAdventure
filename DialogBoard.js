@@ -8,20 +8,31 @@ function DialogBoard() {
 	this.width_min = 46;
 	this.height_min = 48;
 
-	this.width_max = 180;
-	this.height_max = 180;
+	this.width_max = 300;
+	this.height_max = 400;
 
 	this.width = 46;
 	this.height = 48;
 
+	this.buffer = document.createElement("canvas");
+	this.buffer.width = this.width_max - this.image.left - this.image.right;
+	this.buffer.height = this.height_max - this.image.top - this.image.bottom;
+	this.buffer_context = this.buffer.getContext("2d");
+	this.buffer_context.font = "600 " + TextBubble.FontSize + "px 微软雅黑";
+
 	this.state = "hide";
 	this.tween_count = 0;
-	this.tween_interval = 0.5;
+	this.tween_interval = 0.3;
+
+	this.object = null;
+
+	this.bubbles = null;
 }
 
-DialogBoard.prototype.show = function() {
+DialogBoard.prototype.show = function(object) {
 	var self = this.self;
 
+	self.object = object;
 	self.active = true;
 	self.state = "showing";
 }
@@ -40,6 +51,15 @@ DialogBoard.prototype.update = function(dt) {
 		if(self.tween_count >= self.tween_interval) {
 			self.tween_count = 0;
 			self.state = "show";
+
+			var combat_records = self.object.Calculate();
+			self.bubbles = new Array();
+			for(var i = 0; i < combat_records.length; i++) {
+				self.bubbles.push(new TextBubble(combat_records[i], self.buffer.width));
+				self.bubbles[i].render_self();
+			}
+			console.log(self.bubbles);
+
 			return;
 		}
 		var process = self.tween_count / self.tween_interval;
@@ -67,6 +87,17 @@ DialogBoard.prototype.render = function(ctx) {
 	var self = this.self;
 
 	self.image.render(ctx, self.x - self.width / 2, self.y - self.height / 2, self.width, self.height);
+	if(self.state == "show") {
+		self.buffer_context.clearRect(0, 0, self.buffer.width, self.buffer.height);
+
+		var y_offset = 0;
+		for(var i = 0; i < self.bubbles.length; i++) {
+			self.buffer_context.drawImage(self.bubbles[i].buffer, 0, y_offset);
+			y_offset += self.bubbles[i].height;
+		}
+
+		ctx.drawImage(self.buffer, self.x - self.buffer.width / 2, self.y - self.buffer.height / 2);
+	}
 }
 
 DialogBoard.prototype.contains = function(point) {
@@ -74,7 +105,7 @@ DialogBoard.prototype.contains = function(point) {
 
 	var dx = Math.abs(point.x - self.x);
 	var dy = Math.abs(point.y - self.y);
-	return dx <= self.width / 2 && dy <= self.height / 2;
+	return self.state == "show" && dx <= self.width / 2 && dy <= self.height / 2;
 }
 
 DialogBoard.prototype.onClicked = function(point) {

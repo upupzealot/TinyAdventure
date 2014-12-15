@@ -17,6 +17,6 @@ Tile.prototype.render = function(ctx, offset_x, offset_y) {
 
 	ctx.drawImage(self.pattern, offset_x, offset_y);
 	if(self.object != null) {
-		ctx.drawImage(new Bitmap(self.object + ".png"), offset_x, offset_y);
+		ctx.drawImage(self.object.pattern, offset_x, offset_y);
 	}
 }

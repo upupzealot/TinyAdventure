@@ -32,6 +32,9 @@ function Hero() {
 	this.step_begin_position = {x : 0, y : 0};
 	this.step_progress = 0;
 	this.step_offset = {x : 0, y : 0};
+
+	this.combat_unit = new CombatUnit(300, 20);
+	this.combat_unit.name = "你";
 }
 
 Hero.prototype.step = function(direction) {
@@ -56,7 +59,7 @@ Hero.prototype.step = function(direction) {
 	}
 
 	if(front_tile.object != null) {
-		self.scene.dialog_board.show();
+		self.scene.dialog_board.show(new CombatField(self.combat_unit, front_tile.object.combat_unit));
 		self.stopped = true;
 		return;
 	}

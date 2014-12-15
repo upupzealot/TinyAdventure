@@ -10,6 +10,7 @@ function Map() {
 	Bitmap.load("Slate.png");
 	Bitmap.load("Grass.png");
 	Bitmap.load("Box.png");
+	Bitmap.load("Enemy.png");
 	Bitmap.load("Bubble.png");
 
 	this.tiles = new Array();
@@ -26,7 +27,7 @@ function Map() {
 		}
 	}
 
-	this.tiles[2][5].object = "Box";
+	this.tiles[2][3].object = new Enemy();
 
 	this.hero = new Hero();
 	this.hero.x = 2 * 80 + 40;

@@ -10,6 +10,30 @@ function base (child_instance, parent_class, arguments) {
 	child_instance.super = parent_class.prototype;
 }
 
+CanvasRenderingContext2D.prototype.wrapText = function(text, line_width) {
+	if(text == "" || this.measureText(text).width <= line_width) {
+		return new Array(text);
+	} else {
+		var i = 1;
+		var substring = "";
+		var lines = new Array();
+		while(text.length > 0) {
+			substring = text.substring(0, i);
+			if(this.measureText(substring).width > line_width) {
+				lines.push(text.substring(0, i - 1));
+				text = text.substring(i - 1, text.length);
+				i = 1;
+			} else if(i >= text.length){
+				lines.push(text);
+				break;
+			} else {
+				i++;
+			}
+		}
+		return lines;
+	}
+}
+
 Math.easeOutBack = function(start, end, value){
 		var s = 1.70158;
 		end -= start;
