@@ -20,3 +20,10 @@ Tile.prototype.render = function(ctx, offset_x, offset_y) {
 		ctx.drawImage(self.object.pattern, offset_x, offset_y);
 	}
 }
+
+Tile.prototype.setObject = function(object) {
+	var self = this.self;
+
+	self.object = object;
+	self.object.tile = self;
+}

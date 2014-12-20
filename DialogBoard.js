@@ -33,6 +33,8 @@ function DialogBoard() {
 	this.delay_count = 0;
 	this.show_over = false;
 	this.button = new GameButton("确  定");
+
+	this.result = null;
 }
 
 DialogBoard.prototype.addButton = function() {
@@ -74,10 +76,20 @@ DialogBoard.prototype.update = function(dt) {
 			self.tween_count = 0;
 			self.state = "show";
 
-			var combat_records = self.object.Calculate();
+			self.object.Calculate();
+			
+			if(self.object.winner.campus == "player") {
+				self.result = "win";
+			} else if(self.object.winner == null) {
+				self.result = null;
+			} else {
+				self.result = "lose";
+			}
+			console.log(self.result);
+			
 			self.bubbles = new Array();
-			for(var i = 0; i < combat_records.length; i++) {
-				self.bubbles.push(new TextBubble(combat_records[i], self.buffer.width));
+			for(var i = 0; i < self.object.records.length; i++) {
+				self.bubbles.push(new TextBubble(self.object.records[i], self.buffer.width));
 				self.bubbles[i].render_self();
 			}
 			self.pop_count = 0;
@@ -99,6 +111,7 @@ DialogBoard.prototype.update = function(dt) {
 			self.state = "hide";
 			self.active = false;
 			self.scene.hero.stopped = false;
+			self.scene.render_map();
 			return;
 		}
 		var process = self.tween_count / self.tween_interval;
@@ -173,6 +186,9 @@ DialogBoard.prototype.render_on_show = function(ctx) {
 
 	if(self.show_over) {
 		self.button.active = true;
+		if(self.result == "win") {
+			//console.log("win");
+		}
 	}
 
 	ctx.drawImage(self.buffer, self.x - self.buffer.width / 2, self.y - self.buffer.height / 2);

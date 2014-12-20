@@ -38,6 +38,10 @@ addEventListener("keydown",
 false);
 
 function PointConvert(point_event) {
+	if (Screen.canvas == null) {
+		return;
+	};
+
 	var rect = Screen.canvas.getBoundingClientRect();
 	var x = point_event.clientX - rect.left;
 	var y = point_event.clientY - rect.top;

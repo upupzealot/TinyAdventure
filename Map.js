@@ -34,7 +34,7 @@ Map.prototype.start = function() {
 		}
 	}
 
-	this.tiles[2][3].object = new Enemy();
+	this.tiles[2][3].setObject(new Enemy());
 
 	var current_time = new Date().getTime();
 	self.render_map();
