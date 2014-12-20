@@ -45,11 +45,11 @@ Map.prototype.start = function() {
 	this.hero.y = 6 * 80 + 10;
 	this.addActor(this.hero);
 
-	this.dialog_board = new DialogBoard();
+	this.dialog_board = new CombatDialogBoard();
 	this.dialog_board.x = this.width / 2;
 	this.dialog_board.y = this.height / 2;
 	this.addActor(this.dialog_board);
-	this.dialog_board.addButton();
+	//this.dialog_board.addButton();
 }
 
 Map.prototype.render_map = function() {

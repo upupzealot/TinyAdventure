@@ -1,13 +1,12 @@
 function base (child_instance, parent_class, arguments) {
-	parent_class.apply(child_instance, arguments);
-
+	var proto = child_instance.constructor.prototype;
 	for(var prop in parent_class.prototype) {
-		var proto = child_instance.constructor.prototype;
 		if(!proto[prop]) {
 			proto[prop] = parent_class.prototype[prop];
 		}
 	}
 	child_instance.super = parent_class.prototype;
+	parent_class.apply(child_instance, arguments);
 }
 
 CanvasRenderingContext2D.prototype.wrapText = function(text, line_width) {
