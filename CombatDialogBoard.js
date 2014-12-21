@@ -31,7 +31,7 @@ CombatDialogBoard.prototype.addButton = function() {
 		return dx <= self.width / 2 && dy <= self.height / 2;
 	}
 	self.button.onClicked = function(point) {
-		self.active = false;
+		self.button.active = false;
 		self.scene.render_map();
 		self.hide();
 	}
