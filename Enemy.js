@@ -3,9 +3,10 @@ function Enemy() {
 
 	this.pattern = new Bitmap("Enemy.png");
 
-	this.combat_unit = new CombatUnit();
+	this.combat_unit = new CombatUnit(100, 10);
 	this.combat_unit.name = "Enemy";
 	this.combat_unit.object = this;
+	this.avatar = new Avatar("Avatars/Enemy.png");
 
 	this.tile = null;
 }

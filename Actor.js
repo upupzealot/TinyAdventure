@@ -4,7 +4,7 @@ function Actor(image) {
 	this.x = 0;
 	this.y = 0;
 	this.scale = 1;
-	this.color = "#FF0000";
+	this.alpha = 1;
 	if(image != null) {
 		this.image = image;
 	} else {
@@ -22,16 +22,30 @@ Actor.prototype = {
 	render:function(ctx) {
 		var self = this.self;
 		if(self.scale == 1) {
-			ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
+			if(self.alpha == 1) {
+				ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
+			} else {
+				ctx.globalAlhpa = self.alpha;
+				ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
+				ctx.globalAlhpa = 1;
+			}
 		} else {
 			ctx.save();
+
 				ctx.translate(self.x, self.y);
 				ctx.scale(self.scale, self.scale);
 
-				if(self.image == null) {ctx.restore();;return;}
-				ctx.drawImage(self.image, -self.image.width / 2, -self.image.height / 2);
+				if(self.image == null) {ctx.restore();return;}
 
-				ctx.restore();
+				if(self.alpha == 1) {
+					ctx.drawImage(self.image, -self.image.width / 2, -self.image.height / 2);
+				} else {
+					ctx.globalAlpha = self.alpha;
+					ctx.drawImage(self.image, -self.image.width / 2, -self.image.height / 2);
+					ctx.globalAlhpa = 1;
+				}
+
+			ctx.restore();
 		}
 	},
 

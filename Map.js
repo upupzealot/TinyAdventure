@@ -11,7 +11,9 @@ function Map() {
 	Bitmap.load("Grass.png");
 	Bitmap.load("Box.png");
 	Bitmap.load("Enemy.png");
-	//Bitmap.load("Bubble.png");
+	Bitmap.load("AvatarFrame.png");
+	Bitmap.load("BarFrame.png");
+	Bitmap.load("BarFill.png");
 	Bitmap.load("Bubble_filled.png");
 	Bitmap.load("TextBubble.png");
 	Bitmap.load("Button.png");

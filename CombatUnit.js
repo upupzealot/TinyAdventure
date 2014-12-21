@@ -1,6 +1,7 @@
-function CombatUnit() {
-	this.HP = 100;
-	this.atk = 10;
+function CombatUnit(hp, atk) {
+	this.HP_max = hp;
+	this.HP = this.HP_max;
+	this.atk = atk;
 
 	if(arguments.length == 2) {
 		this.HP = arguments[0];

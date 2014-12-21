@@ -8,14 +8,18 @@ function DialogBoard() {
 	this.height_min = 48;
 
 	this.width_max = 300;
-	this.height_max = 400;
+	this.height_max = 500;
 
 	this.width = 46;
 	this.height = 48;
 
 	this.buffer = document.createElement("canvas");
-	this.buffer.width = this.width_max - this.image.left - this.image.right;
-	this.buffer.height = this.height_max - this.image.top - this.image.bottom;
+	this.buffer_top = 0;
+	this.buffer_bottom = 0;
+	this.buffer_left = 0;
+	this.buffer_right = 0;
+	this.buffer.width = this.width_max - this.image.left - this.image.right - this.buffer_left - this.buffer_right;
+	this.buffer.height = this.height_max - this.image.top - this.image.bottom - this.buffer_top - this.buffer_bottom;
 	this.buffer_context = this.buffer.getContext("2d");
 
 	this.state = "hide";

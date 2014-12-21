@@ -1,6 +1,11 @@
 function CombatDialogBoard() {
 	base(this, DialogBoard, []);
 
+	this.buffer_top = 85;
+	this.buffer_bottom = 85;
+	this.buffer.height = this.height_max - this.image.top - this.image.bottom - this.buffer_top - this.buffer_bottom;
+	this.buffer_context = this.buffer.getContext("2d");
+
 	this.object = null;
 
 	this.bubbles = null;
@@ -11,6 +16,8 @@ function CombatDialogBoard() {
 	this.delay_count = 0;
 	this.show_over = false;
 	this.button = null;
+
+	//this.avator0 = new NinePatch("AvatarFrame.png", 24, 24, 23, 23);
 }
 
 CombatDialogBoard.prototype.addButton = function() {
@@ -27,7 +34,7 @@ CombatDialogBoard.prototype.addButton = function() {
 		self.scene.render_map();
 		self.hide();
 	}
-	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.button.height / 2);
+	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.buffer_bottom - self.button.height / 2);
 }
 
 CombatDialogBoard.prototype.onShow = function(dt) {
@@ -81,6 +88,14 @@ CombatDialogBoard.BubbleGap = 10;
 CombatDialogBoard.prototype.render_on_show = function(ctx) {
 	var self = this.self;
 
+	var top = self.y - self.height_max / 2 + self.image.top;
+	var left = self.x - self.width_max / 2 + self.image.left;
+	var width = self.width_max - self.image.left - self.image.right;
+	var height = self.height_max - self.image.top - self.image.bottom;
+	self.object.unit1.object.avatar.render(ctx, left, top, width, Avatar.size, "left");
+
+	self.object.unit0.object.avatar.render(ctx, left, top + height - Avatar.size, width, Avatar.size, "right");
+
 	self.buffer_context.clearRect(0, 0, self.buffer.width, self.buffer.height);
 
 	var y_offset = 0;
@@ -93,5 +108,5 @@ CombatDialogBoard.prototype.render_on_show = function(ctx) {
 		self.button.active = true;
 	}
 
-	ctx.drawImage(self.buffer, self.x - self.buffer.width / 2, self.y - self.buffer.height / 2);
+	ctx.drawImage(self.buffer, left + self.buffer_left, top + self.buffer_top);
 }

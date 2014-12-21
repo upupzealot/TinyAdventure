@@ -7,6 +7,8 @@ function NinePatch(filename, top, bottom, left, right) {
 	this.bottom = bottom;
 	this.left = left;
 	this.right = right;
+
+	this.inset = new Array();
 }
 
 NinePatch.prototype.render = function(ctx, left, top, width, height) {
