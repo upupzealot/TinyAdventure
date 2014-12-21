@@ -51,18 +51,6 @@ DialogBoard.prototype.update = function(dt) {
 			self.state = "show";
 			self.onShow();
 
-			self.object.Calculate();
-			
-			self.bubbles = new Array();
-			for(var i = 0; i < self.object.records.length; i++) {
-				self.bubbles.push(new TextBubble(self.object.records[i], self.buffer.width));
-				self.bubbles[i].render_self();
-			}
-			self.pop_count = 0;
-			self.pop_state = "pop";
-			self.show_over = false;
-			console.log(self.bubbles);
-
 			return;
 		}
 		var process = self.tween_count / self.tween_interval;

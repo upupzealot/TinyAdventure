@@ -37,7 +37,7 @@ function Hero() {
 	this.combat_unit.object = this;
 	this.combat_unit.campus = "player";
 	this.combat_unit.name = "你";
-	this.avatar = new Avatar("Avatars/Hero.png");
+	this.avatar_image = new Bitmap("Avatars/Hero.png");
 }
 
 Hero.prototype.step = function(direction) {

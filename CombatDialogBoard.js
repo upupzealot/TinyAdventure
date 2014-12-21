@@ -17,7 +17,8 @@ function CombatDialogBoard() {
 	this.show_over = false;
 	this.button = null;
 
-	//this.avator0 = new NinePatch("AvatarFrame.png", 24, 24, 23, 23);
+	this.avatar0 = null;
+	this.avatar1 = null;
 }
 
 CombatDialogBoard.prototype.addButton = function() {
@@ -25,25 +26,44 @@ CombatDialogBoard.prototype.addButton = function() {
 
 	self.button.active = false;
 	self.button.contains = function(point) {
-		var dx = Math.abs(point.x - this.x);
-		var dy = Math.abs(point.y - this.y);
-		return dx <= this.width / 2 && dy <= this.height / 2;
+		var dx = Math.abs(point.x - self.x);
+		var dy = Math.abs(point.y - self.y);
+		return dx <= self.width / 2 && dy <= self.height / 2;
 	}
 	self.button.onClicked = function(point) {
-		this.active = false;
+		self.active = false;
 		self.scene.render_map();
 		self.hide();
 	}
 	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.buffer_bottom - self.button.height / 2);
 }
 
-CombatDialogBoard.prototype.onShow = function(dt) {
+CombatDialogBoard.prototype.onShow = function() {
 	var self = this.self;
+
+	self.avatar0 = new Avatar(self.object.unit0);
+	self.avatar1 = new Avatar(self.object.unit1);
+
+	self.object.Calculate();
+			
+	self.bubbles = new Array();
+	for(var i = 0; i < self.object.records.length; i++) {
+		self.bubbles.push(new TextBubble(self.object.records[i].text, self.buffer.width));
+		self.bubbles[i].render_self();
+	}
+	self.pop_count = 0;
+	self.pop_state = "pop";
+	self.show_over = false;
+	console.log(self.bubbles);
 
 	if(self.button == null) {
 		self.button = new GameButton("确  定");
 		self.addButton();
 	}
+}
+
+CombatDialogBoard.prototype.onEnterRecord = function(record) {
+	record.dst.HP -= record.damage;
 }
 
 CombatDialogBoard.DelayInterval = 0.5;
@@ -57,6 +77,7 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 		}
 
 		self.y_offset += self.bubbles[self.pop_count].height + CombatDialogBoard.BubbleGap;
+		self.onEnterRecord(self.object.records[self.pop_count]);
 		self.pop_count++;
 		if(self.pop_count == self.bubbles.length) {
 			self.y_offset += self.button.height;
@@ -92,9 +113,9 @@ CombatDialogBoard.prototype.render_on_show = function(ctx) {
 	var left = self.x - self.width_max / 2 + self.image.left;
 	var width = self.width_max - self.image.left - self.image.right;
 	var height = self.height_max - self.image.top - self.image.bottom;
-	self.object.unit1.object.avatar.render(ctx, left, top, width, Avatar.size, "left");
+	self.avatar1.render(ctx, left, top, width, Avatar.size, "left");
 
-	self.object.unit0.object.avatar.render(ctx, left, top + height - Avatar.size, width, Avatar.size, "right");
+	self.avatar0.render(ctx, left, top + height - Avatar.size, width, Avatar.size, "right");
 
 	self.buffer_context.clearRect(0, 0, self.buffer.width, self.buffer.height);
 

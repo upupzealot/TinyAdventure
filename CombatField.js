@@ -14,15 +14,19 @@ function CombatField(unit0, unit1) {
 CombatField.prototype.Calculate = function() {
 	var self = this.self;
 
+	var HP_0 = self.unit0.HP;
+	var HP_1 = self.unit1.HP;
+
 	self.records = new Array();
 	while(!self.isFinished()) {
-		self.records.push(self.unit0.name + "攻击了" + self.unit1.name + "，造成了" + self.unit0.atk + "点伤害。");
+		//self.records.push(self.unit0.name + "攻击了" + self.unit1.name + "，造成了" + self.unit0.atk + "点伤害。");
+		self.records.push(new CombatRecord(self.unit0, self.unit1, "攻击", self.unit0.atk));
 		self.unit1.HP -= self.unit0.atk;
 		self.unit1.HP = Math.max(0, self.unit1.HP);
 		if(self.isFinished()) {
 			break;
 		}
-		self.records.push(self.unit1.name + "攻击了" + self.unit0.name + "，造成了" + self.unit1.atk + "点伤害。");
+		self.records.push(new CombatRecord(self.unit1, self.unit0, "攻击", self.unit1.atk));
 		self.unit0.HP -= self.unit1.atk;
 		self.unit0.HP = Math.max(0, self.unit0.HP);
 		self.turn++;
@@ -40,6 +44,9 @@ CombatField.prototype.Calculate = function() {
 		self.loser = self.unit1;
 		self.loser.object.onLose();
 	}
+
+	self.unit0.HP = HP_0;
+	self.unit1.HP = HP_1;
 }
 
 CombatField.prototype.isFinished = function() {
