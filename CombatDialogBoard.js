@@ -41,8 +41,12 @@ CombatDialogBoard.prototype.addButton = function() {
 CombatDialogBoard.prototype.onShow = function() {
 	var self = this.self;
 
-	self.avatar0 = new Avatar(self.object.unit0);
-	self.avatar1 = new Avatar(self.object.unit1);
+	var top = self.y - self.height_max / 2 + self.image.top;
+	var left = self.x - self.width_max / 2 + self.image.left;
+	var width = self.width_max - self.image.left - self.image.right;
+	var height = self.height_max - self.image.top - self.image.bottom;
+	self.avatar0 = new Avatar(self.object.unit0, "right", left, top + height - Avatar.size, width, Avatar.size);
+	self.avatar1 = new Avatar(self.object.unit1, "left", left, top, width, Avatar.size);
 
 	self.object.Calculate();
 			
@@ -70,6 +74,9 @@ CombatDialogBoard.DelayInterval = 0.5;
 
 CombatDialogBoard.prototype.update_on_show = function(dt) {
 	var self = this.self;
+
+	self.avatar0.update(dt);
+	self.avatar1.update(dt);
 
 	if(self.pop_state == "pop") {
 		if(self.pop_count >= self.bubbles.length) {
@@ -113,9 +120,9 @@ CombatDialogBoard.prototype.render_on_show = function(ctx) {
 	var left = self.x - self.width_max / 2 + self.image.left;
 	var width = self.width_max - self.image.left - self.image.right;
 	var height = self.height_max - self.image.top - self.image.bottom;
-	self.avatar1.render(ctx, left, top, width, Avatar.size, "left");
+	self.avatar1.render(ctx);
 
-	self.avatar0.render(ctx, left, top + height - Avatar.size, width, Avatar.size, "right");
+	self.avatar0.render(ctx);
 
 	self.buffer_context.clearRect(0, 0, self.buffer.width, self.buffer.height);
 

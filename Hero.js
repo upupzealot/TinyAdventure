@@ -33,7 +33,7 @@ function Hero() {
 	this.step_progress = 0;
 	this.step_offset = {x : 0, y : 0};
 
-	this.combat_unit = new CombatUnit(300, 20);
+	this.combat_unit = new CombatUnit(150, 20);
 	this.combat_unit.object = this;
 	this.combat_unit.campus = "player";
 	this.combat_unit.name = "你";
