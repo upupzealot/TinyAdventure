@@ -34,6 +34,7 @@ CombatDialogBoard.prototype.addButton = function() {
 		self.button.active = false;
 		self.scene.render_map();
 		self.hide();
+		self.scene.repaint = true;
 	}
 	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.buffer_bottom - self.button.height / 2);
 }
@@ -64,6 +65,8 @@ CombatDialogBoard.prototype.onShow = function() {
 		self.button = new GameButton("确  定");
 		self.addButton();
 	}
+
+	self.scene.repaint = false;
 }
 
 CombatDialogBoard.prototype.onEnterRecord = function(record) {
@@ -128,7 +131,10 @@ CombatDialogBoard.prototype.render_on_show = function(ctx) {
 
 	var y_offset = 0;
 	for(var i = 0; i < self.bubbles.length; i++) {
-		self.buffer_context.drawImage(self.bubbles[i].buffer, 0, y_offset + self.buffer.height - self.y_delay);
+		var y = y_offset + self.buffer.height - self.y_delay;
+		if(y < self.buffer.height && y + self.bubbles[i].height > 0) {
+			self.buffer_context.drawImage(self.bubbles[i].buffer, 0, y);
+		}
 		y_offset += self.bubbles[i].height + CombatDialogBoard.BubbleGap;
 	}
 

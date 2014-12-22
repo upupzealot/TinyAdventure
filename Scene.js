@@ -13,6 +13,7 @@ function Scene(width, height) {
 
 	this.color = "#707070";
 	this.background = null;
+	this.repaint = true;
 }
 
 Scene.prototype = {

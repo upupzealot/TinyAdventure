@@ -12,6 +12,7 @@ function Actor(image) {
 	}
 
 	this.active = true;
+	this.repaint = true;
 }
 
 Actor.prototype = {

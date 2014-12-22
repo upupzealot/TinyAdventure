@@ -34,7 +34,6 @@ Game.act = function() {
 		var current_time = new Date().getTime();
 		if(Game.time_mark == 0) {
 			Game.time_mark = current_time;
-			//self.start();
 			return;
 		}
 		Game.dt = (current_time - Game.time_mark) / 1000;
@@ -48,9 +47,11 @@ Game.act = function() {
 				Game.current_scene.actors[i].update(Game.dt);
 			}
 		};
-		Game.current_scene.render(Screen.ctx);
+		if(Game.current_scene.repaint) {
+			Game.current_scene.render(Screen.ctx);
+		}
 		for (var i = 0; i <  Game.current_scene.actors.length; i++) {
-			if(Game.current_scene.actors[i].active) {
+			if(Game.current_scene.actors[i].active && Game.current_scene.actors[i].repaint) {
 				Game.current_scene.actors[i].render(Screen.ctx);
 			}
 		};
@@ -61,7 +62,6 @@ Game.act = function() {
 		Screen.ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
 		Screen.ctx.fillText("fps:" + Game.FPS.fps, 0, 25);
 		Screen.ctx.fillText("active:" + Game.current_scene.dialog_board.active, 0, 40);
-		//Screen.ctx.fillText("clip:" + Screen.clip_x + "," + Screen.clip_y, 0, 55);
 	}
 }
 

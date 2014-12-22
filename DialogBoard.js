@@ -89,9 +89,11 @@ DialogBoard.prototype.update_on_show = function(dt) {
 DialogBoard.prototype.render = function(ctx) {
 	var self = this.self;
 
-	self.image.render(ctx, self.x - self.width / 2, self.y - self.height / 2, self.width, self.height);
 	if(self.state == "show") {
+		self.image.center_render(ctx, self.x - self.width / 2, self.y - self.height / 2, self.width, self.height);
 		self.render_on_show(ctx);
+	} else {
+		self.image.render(ctx, self.x - self.width / 2, self.y - self.height / 2, self.width, self.height);
 	}
 }
 
