@@ -38,11 +38,9 @@ CombatField.prototype.Calculate = function() {
 	} else if (self.unit0.HP <= 0) {
 		self.winner = self.unit1;
 		self.loser = self.unit0;
-		self.loser.object.onLose();
 	} else if (self.unit1.HP <= 0) {
 		self.winner = self.unit0;
 		self.loser = self.unit1;
-		self.loser.object.onLose();
 	}
 
 	self.unit0.HP = HP_0;

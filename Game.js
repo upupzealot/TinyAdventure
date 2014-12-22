@@ -47,6 +47,7 @@ Game.act = function() {
 				Game.current_scene.actors[i].update(Game.dt);
 			}
 		};
+		
 		if(Game.current_scene.repaint) {
 			Game.current_scene.render(Screen.ctx);
 		}

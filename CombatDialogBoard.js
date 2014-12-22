@@ -31,6 +31,10 @@ CombatDialogBoard.prototype.addButton = function() {
 		return dx <= self.width / 2 && dy <= self.height / 2;
 	}
 	self.button.onClicked = function(point) {
+		self.object.loser.object.onLose();
+
+		self.y_offset = 0;
+		self.y_delay = 0;
 		self.button.active = false;
 		self.scene.render_map();
 		self.hide();
@@ -83,6 +87,10 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 
 	if(self.pop_state == "pop") {
 		if(self.pop_count >= self.bubbles.length) {
+			if(!self.show_over) {
+				self.onShowOver();
+				self.show_over = true;
+			}
 			return;
 		}
 
@@ -100,7 +108,11 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 
 			if(self.y_delay >= self.y_offset) {
 				if(self.pop_count == self.bubbles.length) {
-					self.show_over = true;
+					if(!self.show_over) {
+						self.onShowOver();
+						self.show_over = true;
+					}
+					
 				}
 				self.pop_state = "delay";
 			}
@@ -129,18 +141,20 @@ CombatDialogBoard.prototype.render_on_show = function(ctx) {
 
 	self.buffer_context.clearRect(0, 0, self.buffer.width, self.buffer.height);
 
-	var y_offset = 0;
+	var height_count = 0;
 	for(var i = 0; i < self.bubbles.length; i++) {
-		var y = y_offset + self.buffer.height - self.y_delay;
+		var y = height_count + self.buffer.height - self.y_delay;
 		if(y < self.buffer.height && y + self.bubbles[i].height > 0) {
 			self.buffer_context.drawImage(self.bubbles[i].buffer, 0, y);
 		}
-		y_offset += self.bubbles[i].height + CombatDialogBoard.BubbleGap;
-	}
-
-	if(self.show_over) {
-		self.button.active = true;
+		height_count += self.bubbles[i].height + CombatDialogBoard.BubbleGap;
 	}
 
 	ctx.drawImage(self.buffer, left + self.buffer_left, top + self.buffer_top);
+}
+
+CombatDialogBoard.prototype.onShowOver = function(ctx) {
+	var self = this.self;
+
+	self.button.active = true;
 }

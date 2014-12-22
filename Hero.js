@@ -40,6 +40,13 @@ function Hero() {
 	this.avatar_image = new Bitmap("Avatars/Hero.png");
 }
 
+Hero.prototype.onLose = function() {
+	var self = this.self;
+
+	self.combat_unit.HP = self.combat_unit.HP_max;
+	console.log(self.combat_unit);
+}
+
 Hero.prototype.step = function(direction) {
 	var self = this.self;
 
@@ -47,13 +54,13 @@ Hero.prototype.step = function(direction) {
 	var front_tile;
 	switch (direction) {
 		case "up": 
-			front_tile = self.scene.tiles[2][5];
+			front_tile = self.scene.tiles[2][6];
 			break;
 		case "left" : 
-			front_tile = self.scene.tiles[1][6];
+			front_tile = self.scene.tiles[1][7];
 			break;
 		case "right" : 
-			front_tile = self.scene.tiles[3][6];
+			front_tile = self.scene.tiles[3][7];
 			break;
 	}
 
