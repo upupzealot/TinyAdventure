@@ -20,9 +20,9 @@ function Avatar(object, side,  x, y, width, height) {
 	} else if(side == "right") {
 		this.bar_length_max = this.width - Avatar.size - this.bar_frame.inset.left;
 	}
-	this.delay_length = this.bar_length_max;
-
+	
 	this.object = object;
+	this.delay_length = this.bar_length_max * this.object.HP / this.object.HP_max;
 }
 
 Avatar.size = 75;

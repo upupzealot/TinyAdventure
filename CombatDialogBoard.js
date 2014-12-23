@@ -6,12 +6,12 @@ function CombatDialogBoard() {
 	this.buffer.height = this.height_max - this.image.top - this.image.bottom - this.buffer_top - this.buffer_bottom;
 	this.buffer_context = this.buffer.getContext("2d");
 
-	this.object = null;
+	this.calculator = null;
 
-	this.bubbles = null;
+	this.bubbles = new Array();
 	this.y_offset = 0;
 	this.y_delay = 0;
-	this.pop_state = "pop";
+	this.pop_state = "dalay";
 	this.pop_count = 0;
 	this.delay_count = 0;
 	this.show_over = false;
@@ -26,12 +26,12 @@ CombatDialogBoard.prototype.addButton = function() {
 
 	self.button.active = false;
 	self.button.contains = function(point) {
-		var dx = Math.abs(point.x - self.x);
-		var dy = Math.abs(point.y - self.y);
-		return dx <= self.width / 2 && dy <= self.height / 2;
+		var dx = Math.abs(point.x - this.x);
+		var dy = Math.abs(point.y - this.y);
+		return dx <= this.image.width / 2 && dy <= this.image.height / 2;
 	}
 	self.button.onClicked = function(point) {
-		self.object.loser.object.onLose();
+		self.calculator.loser.object.onLose();
 
 		self.y_offset = 0;
 		self.y_delay = 0;
@@ -43,27 +43,25 @@ CombatDialogBoard.prototype.addButton = function() {
 	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.buffer_bottom - self.button.height / 2);
 }
 
-CombatDialogBoard.prototype.onShow = function() {
+CombatDialogBoard.prototype.show = function(object) {
 	var self = this.self;
 
+	DialogBoard.prototype.show.call(self, object);
+	self.calculator = object;
+}
+
+CombatDialogBoard.prototype.onShow = function() {
+	var self = this.self;
 	var top = self.y - self.height_max / 2 + self.image.top;
 	var left = self.x - self.width_max / 2 + self.image.left;
 	var width = self.width_max - self.image.left - self.image.right;
 	var height = self.height_max - self.image.top - self.image.bottom;
-	self.avatar0 = new Avatar(self.object.unit0, "right", left, top + height - Avatar.size, width, Avatar.size);
-	self.avatar1 = new Avatar(self.object.unit1, "left", left, top, width, Avatar.size);
+	self.avatar0 = new Avatar(self.calculator.unit0, "right", left, top + height - Avatar.size, width, Avatar.size);
+	self.avatar1 = new Avatar(self.calculator.unit1, "left", left, top, width, Avatar.size);
 
-	self.object.Calculate();
-			
-	self.bubbles = new Array();
-	for(var i = 0; i < self.object.records.length; i++) {
-		self.bubbles.push(new TextBubble(self.object.records[i].text, self.buffer.width));
-		self.bubbles[i].render_self();
-	}
 	self.pop_count = 0;
-	self.pop_state = "pop";
+	self.pop_state = "delay";
 	self.show_over = false;
-	console.log(self.bubbles);
 
 	if(self.button == null) {
 		self.button = new GameButton("确  定");
@@ -74,7 +72,7 @@ CombatDialogBoard.prototype.onShow = function() {
 }
 
 CombatDialogBoard.prototype.onEnterRecord = function(record) {
-	record.dst.HP -= record.damage;
+	//record.dst.HP -= record.damage;
 }
 
 CombatDialogBoard.DelayInterval = 0.5;
@@ -86,7 +84,7 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 	self.avatar1.update(dt);
 
 	if(self.pop_state == "pop") {
-		if(self.pop_count >= self.bubbles.length) {
+		if(self.calculator.isFinished) {
 			if(!self.show_over) {
 				self.onShowOver();
 				self.show_over = true;
@@ -94,10 +92,14 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 			return;
 		}
 
-		self.y_offset += self.bubbles[self.pop_count].height + CombatDialogBoard.BubbleGap;
-		self.onEnterRecord(self.object.records[self.pop_count]);
+		var record = self.calculator.Calculate();
+		var bubble = new TextBubble(record.text, self.buffer.width);
+		self.bubbles.push(bubble);
+		bubble.render_self();
+		self.y_offset += bubble.height + CombatDialogBoard.BubbleGap;
+		self.onEnterRecord(record);
 		self.pop_count++;
-		if(self.pop_count == self.bubbles.length) {
+		if(self.calculator.isFinished) {
 			self.y_offset += self.button.height;
 		}
 		self.pop_state = "showing";
@@ -107,7 +109,7 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 			self.y_delay = Math.min(self.y_offset, self.y_delay);
 
 			if(self.y_delay >= self.y_offset) {
-				if(self.pop_count == self.bubbles.length) {
+				if(self.calculator.isFinished) {
 					if(!self.show_over) {
 						self.onShowOver();
 						self.show_over = true;

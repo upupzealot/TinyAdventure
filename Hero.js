@@ -69,14 +69,20 @@ Hero.prototype.step = function(direction) {
 	}
 
 	if(front_tile.object != null) {
-		self.scene.dialog_board.show(new CombatField(self.combat_unit, front_tile.object.combat_unit));
-		self.stopped = true;
+		self.CombatWith(front_tile.object);
 		return;
 	}
 
 	self.state = "walk";
 	self.frame_count = 0;
 	animate_count = 0;
+}
+
+Hero.prototype.CombatWith = function(enemy) {
+	var self = this.self;
+
+	self.scene.dialog_board.show(new CombatCalculator(self.combat_unit, enemy.combat_unit));
+	self.stopped = true;
 }
 
 Hero.directions = ["up", "down", "left", "right"];
