@@ -47,7 +47,7 @@ CombatDialogBoard.prototype.show = function(object) {
 
 CombatDialogBoard.prototype.reset = function() {
 	var self = this.self;
-	
+
 	self.bubbles = new Array();
 	self.y_offset = 0;
 	self.y_delay = 0;
@@ -115,7 +115,6 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 		self.pop_count++;
 		if(self.calculator.isFinished) {
 			self.y_offset += self.button.height;
-			console.log(self.y_offset + "," + self.y_delay);
 		}
 		self.pop_state = "showing";
 	} else if (self.pop_state == "showing") {

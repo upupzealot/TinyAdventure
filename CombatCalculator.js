@@ -4,6 +4,9 @@ function CombatCalculator(unit0, unit1) {
 	this.unit0 = unit0;
 	this.unit1 = unit1;
 
+	this.unit0.target = unit1;
+	this.unit1.target = unit0;
+
 	this.turn_owner = unit0;
 	this.turn_target = unit1;
 	this.turn = 0;
@@ -24,10 +27,9 @@ CombatCalculator.prototype.Calculate = function() {
 	var actor = self.turn_owner;
 	var enemy = self.turn_target;
 
-	var record = new CombatRecord(actor, enemy, "攻击", actor.atk)
+	//var record = new CombatRecord(actor, enemy, "攻击", actor.atk);
+	var record = actor.getSkill().cast();
 	self.records.push(record);
-	enemy.HP -= actor.atk;
-	enemy.HP = Math.max(0, enemy.HP);
 	self.turn += 0.5;
 
 	self.checkFinished();
