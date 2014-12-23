@@ -57,9 +57,12 @@ Game.act = function() {
 			}
 		};
 
+		Screen.ctx.font = "10px sans-serif";
 		Screen.ctx.fillStyle = '#707070';
 		Screen.ctx.fillRect(0, 0, 160, 50);
 		Screen.ctx.fillStyle = '#FFFFFF';
+		Screen.ctx.textAlign = "start";
+		Screen.ctx.textBaseline = "alphabetic";
 		Screen.ctx.fillText("mouse position:(" + mouse.x + "," + mouse.y + ")", 0, 10);
 		Screen.ctx.fillText("fps:" + Game.FPS.fps, 0, 25);
 		Screen.ctx.fillText("active:" + Game.current_scene.dialog_board.active, 0, 40);

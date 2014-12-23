@@ -1,4 +1,4 @@
-function Avatar(object, side,  x, y, width, height) {
+function Avatar(unit, side,  x, y, width, height) {
 	this.self = this;
 
 	this.avatar_frame = new NinePatch("AvatarFrame.png", 24, 24, 23, 23);
@@ -14,6 +14,8 @@ function Avatar(object, side,  x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
+
+
 	this.bar_length_max = 0;
 	if(side == "left") {
 		this.bar_length_max = this.width - Avatar.size - this.bar_frame.inset.right;
@@ -21,8 +23,22 @@ function Avatar(object, side,  x, y, width, height) {
 		this.bar_length_max = this.width - Avatar.size - this.bar_frame.inset.left;
 	}
 	
-	this.object = object;
-	this.delay_length = this.bar_length_max * this.object.HP / this.object.HP_max;
+	this.unit = unit;
+	this.hp_bar = null;
+	if(this.side == "left") {
+		var x = this.x + Avatar.size;
+		var y = this.y + this.bar_frame.inset.top;
+		var width = this.bar_length_max * this.unit.HP / this.unit.HP_max;
+		var height = Avatar.bar_height - this.bar_frame.inset.top - this.bar_frame.inset.bottom;
+		this.hp_bar = new Bar(this.unit.HP, this.unit.HP_max, x, y, width, height, this.side);
+	} else if(this.side == "right") {
+		var width = this.bar_length_max * this.unit.HP / this.unit.HP_max;
+		var x = this.x + this.bar_frame.inset.left + this.bar_length_max - width;
+		var y = this.y + this.bar_frame.inset.top;
+		var height = Avatar.bar_height - this.bar_frame.inset.top - this.bar_frame.inset.bottom;
+		this.hp_bar = new Bar(this.unit.HP, this.unit.HP_max, x, y, width, height, this.side);
+	}
+	this.delay_length = this.bar_length_max * this.unit.HP / this.unit.HP_max;
 }
 
 Avatar.size = 75;
@@ -33,24 +49,16 @@ Avatar.prototype.render = function(ctx) {
 	var self = this.self;
 
 	if(self.side == "left") {
-		var bar_length = self.bar_length_max * self.object.HP / self.object.HP_max;
-		
-		ctx.fillStyle = "yellow";
-		ctx.fillRect(self.x + Avatar.size, self.y + self.bar_frame.inset.top, self.delay_length >> 0, Avatar.bar_height - self.bar_frame.inset.top - self.bar_frame.inset.bottom);
-		ctx.drawImage(self.bar_fill, 0, 0, self.bar_fill.width, self.bar_fill.height, self.x + Avatar.size, self.y + self.bar_frame.inset.top, bar_length, Avatar.bar_height - self.bar_frame.inset.top - self.bar_frame.inset.bottom);
+		self.hp_bar.render(ctx);
 		self.bar_frame.render(ctx, self.x + Avatar.size / 2, self.y, self.width - Avatar.size / 2, Avatar.bar_height);
 
-		ctx.drawImage(self.object.object.avatar_image, self.x + Avatar.inset, self.y + Avatar.inset);
+		ctx.drawImage(self.unit.object.avatar_image, self.x + Avatar.inset, self.y + Avatar.inset);
 		self.avatar_frame.render(ctx, self.x, self.y, Avatar.size, Avatar.size);
 	} else if(self.side == "right") {
-		var bar_length = self.bar_length_max * self.object.HP / self.object.HP_max;
-
-		ctx.fillStyle = "yellow";
-		ctx.fillRect(self.x + self.bar_frame.inset.left + self.bar_length_max - (self.delay_length >> 0), self.y + self.bar_frame.inset.top, self.delay_length >> 0, Avatar.bar_height - self.bar_frame.inset.top - self.bar_frame.inset.bottom);
-		ctx.drawImage(self.bar_fill, 0, 0, self.bar_fill.width, self.bar_fill.height, self.x + self.bar_frame.inset.left + self.bar_length_max - bar_length, self.y + self.bar_frame.inset.top, bar_length, Avatar.bar_height - self.bar_frame.inset.top - self.bar_frame.inset.bottom);
+		self.hp_bar.render(ctx);
 		self.bar_frame.render(ctx, self.x, self.y, self.width - Avatar.size / 2, Avatar.bar_height);
 
-		ctx.drawImage(self.object.object.avatar_image, self.x + self.width - Avatar.size + Avatar.inset, self.y + Avatar.inset);
+		ctx.drawImage(self.unit.object.avatar_image, self.x + self.width - Avatar.size + Avatar.inset, self.y + Avatar.inset);
 		self.avatar_frame.render(ctx, self.x + self.width - Avatar.size, self.y, Avatar.size, Avatar.size);
 	}
 }
@@ -58,20 +66,7 @@ Avatar.prototype.render = function(ctx) {
 Avatar.prototype.update = function(dt) {
 	var self = this.self;
 
-	var	bar_length_max;
-	var bar_length;
-	if(self.side == "left") {
-		bar_length_max = self.width - Avatar.size - self.bar_frame.inset.right;
-		bar_length = bar_length_max * self.object.HP / self.object.HP_max;
-	} else if(self.side == "right") {
-		bar_length_max = self.width - Avatar.size - self.bar_frame.inset.left;
-		bar_length = bar_length_max * self.object.HP / self.object.HP_max;
-	}
-
-	if(self.delay_length < bar_length) {
-		self.delay_length = bar_length;
-	} else if(self.delay_length > bar_length) {
-		self.delay_length -= dt * 50;
-		self.delay_length = Math.max(bar_length, self.delay_length);
-	}
+	self.hp_bar.value = self.unit.HP;
+	self.hp_bar.value_max = self.unit.HP_max;
+	self.hp_bar.update(dt);
 }
