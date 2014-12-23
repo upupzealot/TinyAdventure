@@ -14,26 +14,18 @@ function Avatar(unit, side,  x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
-
-
-	this.bar_length_max = 0;
-	if(side == "left") {
-		this.bar_length_max = this.width - Avatar.size - this.bar_frame.inset.right;
-	} else if(side == "right") {
-		this.bar_length_max = this.width - Avatar.size - this.bar_frame.inset.left;
-	}
-	
 	this.unit = unit;
 	this.hp_bar = null;
-	if(this.side == "left") {
+
+	if(side == "left") {
 		var x = this.x + Avatar.size;
 		var y = this.y + this.bar_frame.inset.top;
-		var width = this.bar_length_max * this.unit.HP / this.unit.HP_max;
+		var width = this.width - Avatar.size - this.bar_frame.inset.right;
 		var height = Avatar.bar_height - this.bar_frame.inset.top - this.bar_frame.inset.bottom;
 		this.hp_bar = new Bar(this.unit.HP, this.unit.HP_max, x, y, width, height, this.side);
-	} else if(this.side == "right") {
-		var width = this.bar_length_max * this.unit.HP / this.unit.HP_max;
-		var x = this.x + this.bar_frame.inset.left + this.bar_length_max - width;
+	} else if(side == "right") {
+		var width = this.width - Avatar.size - this.bar_frame.inset.left;
+		var x = this.x + this.bar_frame.inset.left;
 		var y = this.y + this.bar_frame.inset.top;
 		var height = Avatar.bar_height - this.bar_frame.inset.top - this.bar_frame.inset.bottom;
 		this.hp_bar = new Bar(this.unit.HP, this.unit.HP_max, x, y, width, height, this.side);

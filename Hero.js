@@ -44,7 +44,6 @@ Hero.prototype.onLose = function() {
 	var self = this.self;
 
 	self.combat_unit.HP = self.combat_unit.HP_max;
-	console.log(self.combat_unit);
 }
 
 Hero.prototype.step = function(direction) {
