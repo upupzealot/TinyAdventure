@@ -33,12 +33,7 @@ CombatDialogBoard.prototype.addButton = function() {
 	self.button.onClicked = function(point) {
 		self.calculator.loser.object.onLose();
 
-		self.y_offset = 0;
-		self.y_delay = 0;
-		self.button.active = false;
-		self.scene.render_map();
-		self.hide();
-		self.scene.repaint = true;
+		self.reset();
 	}
 	self.scene.addActor(self.button, self.x, self.y + self.height_max / 2 - self.image.bottom - self.buffer_bottom - self.button.height / 2);
 }
@@ -48,6 +43,25 @@ CombatDialogBoard.prototype.show = function(object) {
 
 	DialogBoard.prototype.show.call(self, object);
 	self.calculator = object;
+}
+
+CombatDialogBoard.prototype.reset = function() {
+	var self = this.self;
+	
+	self.bubbles = new Array();
+	self.y_offset = 0;
+	self.y_delay = 0;
+	self.pop_state = "dalay";
+	self.pop_count = 0;
+	self.delay_count = 0;
+	self.show_over = false;
+
+	self.button.active = false;
+
+		
+	self.scene.render_map();
+	self.hide();
+	self.scene.repaint = true;
 }
 
 CombatDialogBoard.prototype.onShow = function() {
@@ -101,6 +115,7 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 		self.pop_count++;
 		if(self.calculator.isFinished) {
 			self.y_offset += self.button.height;
+			console.log(self.y_offset + "," + self.y_delay);
 		}
 		self.pop_state = "showing";
 	} else if (self.pop_state == "showing") {
