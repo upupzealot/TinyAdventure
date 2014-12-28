@@ -33,6 +33,49 @@ CanvasRenderingContext2D.prototype.wrapText = function(text, line_width) {
 	}
 }
 
+CanvasRenderingContext2D.prototype.wrapColorText = function(text, line_width) {
+	var lines = new Array();
+	var marks = new Array();
+	marks.push(new Array());
+	var length_count = 0;
+	var push_count = 0;
+	for(var i = 0; i < text.length;) {
+		if(text.charAt(i) == "<" && text.indexOf(">", i) != -1) {
+			var start = i;
+			var end = text.indexOf(">", i);
+			marks[marks.length - 1][push_count] = text.substring(start + 1, end);
+			text = text.substring(0, start) + text.substring(end + 1);
+		} else {
+			var width = this.measureText(text.charAt(i)).width;
+			if(length_count + width > line_width) {
+				lines.push(text.substring(i - push_count, i).split(""));
+				marks.push(new Array());
+				length_count = 0;
+				push_count = 0;
+			} else {
+				length_count += width;
+				if(marks[lines.length] == null) {
+					marks[lines.length] = new Array();
+				}
+				push_count++;
+				i++;
+			}
+		}
+	}
+	if(push_count != 0) {
+		lines.push(text.substring(text.length - push_count, text.length).split(""));
+	}
+	if(marks.length > 1) {
+		for(var i = marks.length - 1; i >= 1; i--) {
+			if(marks[i - 1].length > lines[i - 1].length) {
+				marks[i][0] = marks[i - 1].pop();
+			}
+		}
+	}
+
+	return {lines : lines, marks : marks};
+}
+
 Math.easeOutBack = function(start, end, value){
 		var s = 1.70158;
 		end -= start;

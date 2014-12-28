@@ -109,7 +109,6 @@ CombatDialogBoard.prototype.update_on_show = function(dt) {
 		var record = self.calculator.Calculate();
 		var bubble = new TextBubble(record.text, self.buffer.width);
 		self.bubbles.push(bubble);
-		bubble.render_self();
 		self.y_offset += bubble.height + CombatDialogBoard.BubbleGap;
 		self.onEnterRecord(record);
 		self.pop_count++;
