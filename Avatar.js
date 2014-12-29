@@ -16,6 +16,7 @@ function Avatar(unit, side,  x, y, width, height) {
 
 	this.unit = unit;
 	this.hp_bar = null;
+	this.skill_bar = new SkillBar(unit);
 
 	if(side == "left") {
 		var x = this.x + Avatar.size;
@@ -35,7 +36,7 @@ function Avatar(unit, side,  x, y, width, height) {
 
 Avatar.size = 75;
 Avatar.inset = 9;
-Avatar.bar_height = 35;
+Avatar.bar_height = 28;
 
 Avatar.prototype.render = function(ctx) {
 	var self = this.self;
@@ -46,12 +47,15 @@ Avatar.prototype.render = function(ctx) {
 
 		ctx.drawImage(self.unit.object.avatar_image, self.x + Avatar.inset, self.y + Avatar.inset);
 		self.avatar_frame.render(ctx, self.x, self.y, Avatar.size, Avatar.size);
+		self.skill_bar.render(ctx, self.x + Avatar.size + SkillBar.Gap, self.y + Avatar.bar_height + SkillBar.Gap, self.hp_bar.width, Avatar.size - Avatar.bar_height - SkillBar.Gap * 2);
 	} else if(self.side == "right") {
 		self.hp_bar.render(ctx);
 		self.bar_frame.render(ctx, self.x, self.y, self.width - Avatar.size / 2, Avatar.bar_height);
 
 		ctx.drawImage(self.unit.object.avatar_image, self.x + self.width - Avatar.size + Avatar.inset, self.y + Avatar.inset);
 		self.avatar_frame.render(ctx, self.x + self.width - Avatar.size, self.y, Avatar.size, Avatar.size);
+		var h = Avatar.size - Avatar.bar_height - SkillBar.Gap * 2;
+		self.skill_bar.render(ctx, self.x + self.hp_bar.width + self.bar_frame.inset.left - h * 4 - SkillBar.Gap * 4, self.y + Avatar.bar_height + SkillBar.Gap, self.hp_bar.width, h);
 	}
 }
 

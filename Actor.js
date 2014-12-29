@@ -26,9 +26,9 @@ Actor.prototype = {
 			if(self.alpha == 1) {
 				ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
 			} else {
-				ctx.globalAlhpa = self.alpha;
+				ctx.globalAlpha = self.alpha;
 				ctx.drawImage(self.image, self.x - self.image.width / 2, self.y - self.image.height / 2);
-				ctx.globalAlhpa = 1;
+				ctx.globalAlpha = 1;
 			}
 		} else {
 			ctx.save();
@@ -43,7 +43,7 @@ Actor.prototype = {
 				} else {
 					ctx.globalAlpha = self.alpha;
 					ctx.drawImage(self.image, -self.image.width / 2, -self.image.height / 2);
-					ctx.globalAlhpa = 1;
+					ctx.globalAlpha = 1;
 				}
 
 			ctx.restore();

@@ -17,6 +17,7 @@ function Map() {
 	Bitmap.load("Bubble_filled.png");
 	Bitmap.load("TextBubble.png");
 	Bitmap.load("Button.png");
+	Bitmap.load("TripleStrike.png");
 }
 
 Map.prototype.start = function() {

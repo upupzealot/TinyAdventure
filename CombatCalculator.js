@@ -4,8 +4,8 @@ function CombatCalculator(unit0, unit1) {
 	this.unit0 = unit0;
 	this.unit1 = unit1;
 
-	this.unit0.target = unit1;
-	this.unit1.target = unit0;
+	this.unit0.setTarget(unit1);
+	this.unit1.setTarget(unit0);
 
 	this.turn_owner = unit0;
 	this.turn_target = unit1;
@@ -27,10 +27,12 @@ CombatCalculator.prototype.Calculate = function() {
 	var actor = self.turn_owner;
 	var enemy = self.turn_target;
 
-	//var record = new CombatRecord(actor, enemy, "攻击", actor.atk);
-	var record = actor.getSkill().cast();
+	actor.enterTurn();
+	var skill = actor.getSkill();
+	var record = skill.cast();
 	self.records.push(record);
 	self.turn += 0.5;
+	skill.CD_count = skill.CD;
 
 	self.checkFinished();
 

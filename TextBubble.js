@@ -5,14 +5,6 @@ function TextBubble(text, width) {
 	this.width = width;
 
 	this.buffer = document.createElement("canvas");
-	this.buffer.width = width;
-	this.buffer_context = this.buffer.getContext("2d");
-	this.buffer_context.font = "600 " + TextBubble.FontSize + "px 微软雅黑";
-	this.buffer_context.textAlign = "left";
-	this.buffer_context.textBaseline = "top";
-	this.color = "#443311";
-	this.buffer_context.fillStyle = this.color;
-	//this.colors = new Array();
 
 	this.skin = new NinePatch("TextBubble.png", 13, 13, 13, 13);
 	this.init();
@@ -24,9 +16,23 @@ TextBubble.LineGap = 5;
 TextBubble.prototype.init = function() {
 	var self = this.self;
 
+	self.buffer_context = self.buffer.getContext("2d");
+	self.buffer_context.font = "600 " + TextBubble.FontSize + "px 微软雅黑";
 	var content = self.buffer_context.wrapColorText(self.text, self.width - self.skin.left - self.skin.right);
 	self.height = content.lines.length * (TextBubble.LineHeight + TextBubble.LineGap);
 	self.height += self.skin.top + self.skin.bottom;
+
+	self.buffer.width = self.width;
+	self.buffer.height = self.height;
+
+	self.buffer_context = self.buffer.getContext("2d");
+	self.buffer_context.font = "600 " + TextBubble.FontSize + "px 微软雅黑";
+	self.buffer_context.textAlign = "left";
+	self.buffer_context.textBaseline = "top";
+	self.color = "#443311";
+	self.buffer_context.fillStyle = self.color;
+
+
 	self.skin.render(self.buffer_context, 0, 0, self.width, self.height);
 	var x = self.skin.left;
 	var y = self.skin.top;
